@@ -3,8 +3,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 
 
-from time import sleep
-
+from time import sleep, gmtime
 
 # podesavanje opcija - enabling mic and cam
 opt = Options()
@@ -23,17 +22,23 @@ driver = webdriver.Chrome(executable_path=PATH, options=opt)
 
 participants = 0
 
-#https://meet.google.com/tnh-eowd-vtc
-meet_link = "https://meet.google.com/lookup/gutpwcfpgh"
+email = ""
+password = ""
+
+#meet_link = "https://meet.google.com/tnh-eowd-vtc"             #telekomunikacije i prijenos podataka
+#meet_link = "https://meet.google.com/lookup/gutpwcfpgh"
+#meet_link = "https://meet.google.com/ffb-tdpi-mog?hs=224"
+#meet_link = "https://meet.google.com/cms-abxw-ciu"
+#meet_link = "https://meet.google.com/nth-kekq-jfs"              #tehnicki engleski jezik
 
 driver.get("https://www.gmail.com")
 sleep(1)
 
-driver.find_element_by_xpath('//*[@id="identifierId"]').send_keys("almin.odobasic.20@size.ba", Keys.RETURN)
+driver.find_element_by_xpath('//*[@id="identifierId"]').send_keys(email, Keys.RETURN)
 while True:
     sleep(3)
     try:
-        driver.find_element_by_xpath('//*[@id="password"]/div[1]/div/div[1]/input').send_keys("pasvord4", Keys.RETURN)
+        driver.find_element_by_xpath('//*[@id="password"]/div[1]/div/div[1]/input').send_keys(password, Keys.RETURN)
         break
     except:
         pass
@@ -41,22 +46,26 @@ while True:
 sleep(5)
 driver.get(meet_link)
 
+meetStarted = False
 while True:
     sleep(10)
     if(len(driver.find_elements_by_xpath('//*[@id="ow3"]/div[1]/div/div[9]/div[3]/div[10]/div[3]/div[2]/div/div/div[2]/div/div')) > 0):
         participants = int(driver.find_element_by_xpath('//*[@id="ow3"]/div[1]/div/div[9]/div[3]/div[10]/div[3]/div[2]/div/div/div[2]/div/div').text)
-        if(participants > 10):
+        if(meetStarted and participants > 15):
             print("Predavanje u toku...")
-        else:
+        elif(not meetStarted and participants >= 25):
+            meetStarted = True
+        elif(meetStarted and participants < 15):
             print("Predavanje zavrsilo!")
             driver.find_element_by_xpath('//*[@id="ow3"]/div[1]/div/div[9]/div[3]/div[10]/div[2]/div/div[6]/span/button').click()
             sleep(5)
-            break;
-        break;
+            break
+        else:
+            print("Ceka se pocetak predavanja..")
     else:
         print("Niste usli na predavanje...")
 
 
 
-input("> ")
+sleep(1)
 driver.quit()

@@ -4,6 +4,8 @@ from selenium.webdriver.common.keys import Keys
 
 
 from time import sleep, gmtime
+meet_link = input("Unesi link meeta: ")
+
 
 # podesavanje opcija - enabling mic and cam
 opt = Options()
@@ -25,14 +27,9 @@ participants = 0
 email = ""
 password = ""
 
-#meet_link = "https://meet.google.com/tnh-eowd-vtc"             #telekomunikacije i prijenos podataka
-#meet_link = "https://meet.google.com/lookup/gutpwcfpgh"
-#meet_link = "https://meet.google.com/ffb-tdpi-mog?hs=224"
-#meet_link = "https://meet.google.com/cms-abxw-ciu"
-#meet_link = "https://meet.google.com/nth-kekq-jfs"              #tehnicki engleski jezik
 
 driver.get("https://www.gmail.com")
-sleep(1)
+sleep(2)
 
 driver.find_element_by_xpath('//*[@id="identifierId"]').send_keys(email, Keys.RETURN)
 while True:
@@ -49,8 +46,8 @@ driver.get(meet_link)
 meetStarted = False
 while True:
     sleep(10)
-    if(len(driver.find_elements_by_xpath('//*[@id="ow3"]/div[1]/div/div[9]/div[3]/div[10]/div[3]/div[2]/div/div/div[2]/div/div')) > 0):
-        participants = int(driver.find_element_by_xpath('//*[@id="ow3"]/div[1]/div/div[9]/div[3]/div[10]/div[3]/div[2]/div/div/div[2]/div/div').text)
+    if(len(driver.find_elements_by_xpath('//*[@id="ow3"]/div[1]/div/div[9]/div[3]/div[10]/div[3]/div[3]/div/div/div[2]/div/div')) > 0):
+        participants = int(driver.find_element_by_xpath('//*[@id="ow3"]/div[1]/div/div[9]/div[3]/div[10]/div[3]/div[3]/div/div/div[2]/div/div').text)
         if(meetStarted and participants > 15):
             print("Predavanje u toku...")
         elif(not meetStarted and participants >= 25):
